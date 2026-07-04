@@ -12,6 +12,7 @@ using DiskInfoToolkit.Interop;
 using DiskInfoToolkit.Native;
 using DiskInfoToolkit.Utilities;
 using Microsoft.Win32.SafeHandles;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -1570,19 +1571,19 @@ namespace DiskInfoToolkit.Probes
                 return 0;
             }
 
-            private int DirectGetStructure<T>(int inputValue, uint command, out T value)
+            private int DirectGetStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(int inputValue, uint command, out T value)
                 where T : struct
             {
                 return DirectGetStructure(BitConverter.GetBytes(inputValue), command, out value);
             }
 
-            private int DirectGetStructure<T>(uint inputValue, uint command, out T value)
+            private int DirectGetStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(uint inputValue, uint command, out T value)
                 where T : struct
             {
                 return DirectGetStructure(BitConverter.GetBytes(inputValue), command, out value);
             }
 
-            private int DirectGetStructure<T>(byte[] input, uint command, out T value)
+            private int DirectGetStructure<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(byte[] input, uint command, out T value)
                 where T : struct
             {
                 value = default;
@@ -1592,7 +1593,7 @@ namespace DiskInfoToolkit.Probes
                     return -1;
                 }
 
-                var output = new byte[Marshal.SizeOf<T>()];
+                byte[] output = new byte[Marshal.SizeOf<T>()];
                 int status = ExecuteHptMiniportCommand(_directPortHandle, command, input, output);
 
                 if (status != 0)

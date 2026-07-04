@@ -11,6 +11,7 @@ using DiskInfoToolkit.Core;
 using DiskInfoToolkit.Interop;
 using DiskInfoToolkit.Utilities;
 using Microsoft.Win32.SafeHandles;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -607,10 +608,10 @@ namespace DiskInfoToolkit.Probes
             return value;
         }
 
-        private static bool SendCsmiMiniport<T>(SafeFileHandle handle, IStorageIoControl ioControl, uint controlCode, byte[] signature, ref T request)
+        private static bool SendCsmiMiniport<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(SafeFileHandle handle, IStorageIoControl ioControl, uint controlCode, byte[] signature, ref T request)
             where T : struct
         {
-            var buffer = StructureHelper.GetBytes(request);
+            byte[] buffer = StructureHelper.GetBytes(request);
 
             bool ok = SendCsmiMiniport(handle, ioControl, controlCode, signature, ref request, buffer);
             if (ok)
@@ -621,12 +622,12 @@ namespace DiskInfoToolkit.Probes
             return ok;
         }
 
-        private static bool SendCsmiMiniport<T>(SafeFileHandle handle, IStorageIoControl ioControl, uint controlCode, byte[] signature, ref T request, byte[] buffer)
+        private static bool SendCsmiMiniport<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(SafeFileHandle handle, IStorageIoControl ioControl, uint controlCode, byte[] signature, ref T request, byte[] buffer)
             where T : struct
         {
             int totalSize = buffer.Length;
 
-            var header = new SRB_IO_CONTROL();
+            SRB_IO_CONTROL header = new SRB_IO_CONTROL();
             header.HeaderLength = (uint)Marshal.SizeOf<SRB_IO_CONTROL>();
             header.Signature = new byte[8];
 
@@ -637,10 +638,10 @@ namespace DiskInfoToolkit.Probes
             header.ReturnCode = 0;
             header.Length = (uint)(totalSize - Marshal.SizeOf<SRB_IO_CONTROL>());
 
-            var headerBytes = StructureHelper.GetBytes(header);
+            byte[] headerBytes = StructureHelper.GetBytes(header);
             Buffer.BlockCopy(headerBytes, 0, buffer, 0, headerBytes.Length);
 
-            if (!ioControl.TryScsiMiniport(handle, buffer, buffer, out var bytesReturned))
+            if (!ioControl.TryScsiMiniport(handle, buffer, buffer, out int bytesReturned))
             {
                 return false;
             }

@@ -46,20 +46,9 @@
 
 			<TextBlock Grid.Row="2" Grid.Column="0" Text="Power status"
 					   IsVisible="{Binding Storage.IsDevicePowerOn, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-			<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Storage.IsDevicePowerOn}"
-					   IsVisible="{Binding Storage.IsDevicePowerOn, Converter={x:Static ObjectConverters.IsNotNull}}">
-				<Interaction.Behaviors>
-					<BehaviorCollection>
-						<DataTriggerBehavior Binding="{Binding Storage.IsDevicePowerOn}" ComparisonCondition="Equal" Value="True">
-							<ChangePropertyAction PropertyName="Text" Value="On"/>
-						</DataTriggerBehavior>
-						<DataTriggerBehavior Binding="{Binding Storage.IsDevicePowerOn}" ComparisonCondition="Equal" Value="False">
-							<ChangePropertyAction PropertyName="Text" Value="Off"/>
-						</DataTriggerBehavior>
-					</BehaviorCollection>
-				</Interaction.Behaviors>
-
-			</TextBlock>
+			<TextBlock Grid.Row="2" Grid.Column="1"
+					   Text="{Binding Storage.IsDevicePowerOn, Converter={StaticResource NullableBoolPowerStateToTextConverter}}"
+					   IsVisible="{Binding Storage.IsDevicePowerOn, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 
 			<TextBlock Grid.Row="3" Grid.Column="0" Text="Health status"
 					   IsVisible="{Binding Storage.HealthStatus, Converter={x:Static ObjectConverters.IsNotNull}}"/>

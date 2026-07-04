@@ -12,6 +12,7 @@ using DiskInfoToolkit.Interop;
 using DiskInfoToolkit.Models;
 using DiskInfoToolkit.Utilities;
 using Microsoft.Win32.SafeHandles;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace DiskInfoToolkit.Probes
@@ -511,7 +512,7 @@ namespace DiskInfoToolkit.Probes
             }
 
             int count = Math.Min(length, dataBuffer.Length);
-            var data = new byte[count];
+            byte[] data = new byte[count];
 
             Buffer.BlockCopy(dataBuffer, 0, data, 0, count);
 
@@ -528,11 +529,11 @@ namespace DiskInfoToolkit.Probes
             return Marshal.SizeOf<MEGARAID_PASS_THROUGH_IOCTL>() - MegaRaidMiniportConstants.DataBufferLength;
         }
 
-        private static T FromBytes<T>(byte[] buffer, int offset)
+        private static T FromBytes<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(byte[] buffer, int offset)
             where T : struct
         {
             int size = Marshal.SizeOf<T>();
-            var ptr = Marshal.AllocHGlobal(size);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
 
             try
             {

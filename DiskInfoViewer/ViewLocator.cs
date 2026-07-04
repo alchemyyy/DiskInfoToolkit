@@ -19,15 +19,13 @@ namespace DiskInfoViewer
             if (param is null)
                 return null;
 
-            var name = param.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
-            var type = Type.GetType(name);
-
-            if (type != null)
+            switch (param)
             {
-                return (Control)Activator.CreateInstance(type)!;
+                case StorageViewModel:
+                    return new Views.StorageView();
+                default:
+                    return new TextBlock { Text = "Not Found: " + param.GetType().FullName };
             }
-
-            return new TextBlock { Text = "Not Found: " + name };
         }
 
         public bool Match(object data)

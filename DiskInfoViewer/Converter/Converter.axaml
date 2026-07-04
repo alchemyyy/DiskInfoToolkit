@@ -9,5 +9,6 @@
     <avaloniaConverters:EnumToBoolConverter x:Key="EnumToBoolConverter"/>
 
     <conv:StorageHealthStatusToColorConverter x:Key="StorageHealthStatusToColorConverter"/>
+    <conv:NullableBoolPowerStateToTextConverter x:Key="NullableBoolPowerStateToTextConverter"/>
 
 </ResourceDictionary>

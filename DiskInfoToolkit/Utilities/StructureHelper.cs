@@ -6,6 +6,7 @@
  * Copyright (c) 2026 Florian K.
  */
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace DiskInfoToolkit.Utilities
@@ -18,9 +19,9 @@ namespace DiskInfoToolkit.Utilities
             where T : struct
         {
             int size = Marshal.SizeOf<T>();
-            var buffer = new byte[size];
+            byte[] buffer = new byte[size];
 
-            var ptr = Marshal.AllocHGlobal(size);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
 
             try
             {
@@ -34,11 +35,11 @@ namespace DiskInfoToolkit.Utilities
             }
         }
 
-        public static T FromBytes<T>(byte[] buffer)
+        public static T FromBytes<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)] T>(byte[] buffer)
             where T : struct
         {
             int size = Marshal.SizeOf<T>();
-            var ptr = Marshal.AllocHGlobal(size);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
 
             try
             {
